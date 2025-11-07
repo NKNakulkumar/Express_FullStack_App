@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Home Page</title>
+  <meta name="description" content="Hero section with an animated background using HTML & CSS" />
+  <style>
+    /* ---------- Basic reset & fonts ---------- */
+    :root{
+      --bg-dark: #0b1020;
+      --glass: rgba(255,255,255,0.06);
+      --accent: #7ee7c7;
+      --accent-2: #7bc0ff;
+      --text: #e8eefc;
+      --muted: rgba(232,238,252,0.7);
+      --container-width: 1100px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: var(--bg-dark);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.35;
+      overflow-x:hidden;
+    }
+
+    /* ---------- Page layout ---------- */
+    .page{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    
+
+    /* ---------- HERO with animated background ---------- */
+    .hero{
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:6rem 20px 8rem;
+      min-height:calc(100vh - 120px);
+      overflow:hidden;
+    }
+
+    /* Animated gradient (background layer) */
+    .bg-gradient{
+      position:absolute;inset:0;z-index:0;
+      background:linear-gradient(120deg,#05223c 0%, #08263f 25%, #061025 50%, #0a2540 75%);
+      opacity:1;
+      filter:blur(10px) saturate(115%);
+      transform:translateZ(0);
+    }
+
+    /* moving colorful gradient overlay */
+    .bg-gradient::after{
+      content:"";
+      position:absolute;inset: -30% -30% -30% -30%;
+      background: conic-gradient(from 120deg at 50% 50%, rgba(124,231,199,0.06), rgba(123,192,255,0.06), rgba(220,120,255,0.05), rgba(124,231,199,0.07));
+      animation: spin 18s linear infinite;
+      mix-blend-mode:screen;
+      opacity:0.9;
+    }
+
+    @keyframes spin{
+      0%{transform:rotate(0deg)}
+      100%{transform:rotate(360deg)}
+    }
+
+    /* Floating blob shapes */
+    .blob{
+      position:absolute;
+      width:420px; height:420px;
+      background: radial-gradient(circle at 30% 30%, rgba(123,192,255,0.12), rgba(124,231,199,0.06) 40%, transparent 60%);
+      filter:blur(40px) saturate(120%);
+      transform:translate3d(0,0,0);
+      z-index:1;
+      mix-blend-mode: screen;
+      border-radius:40%;
+      animation: floatY 12s ease-in-out infinite;
+      opacity:0.95;
+    }
+    .blob.b1{left:-8%;top:10%;width:520px;height:520px;animation-duration:16s}
+    .blob.b2{right:-6%;bottom:-6%;width:420px;height:420px;animation-duration:18s;animation-direction:reverse}
+    .blob.b3{left:10%;bottom:10%;width:260px;height:260px;animation-duration:14s;opacity:0.7}
+
+    @keyframes floatY{
+      0%{transform:translateY(0) rotate(0deg) scale(1)}
+      50%{transform:translateY(-32px) rotate(8deg) scale(1.03)}
+      100%{transform:translateY(0) rotate(0deg) scale(1)}
+    }
+
+    /* subtle twinkling particles using pseudo-element on hero */
+    .hero::before{
+      content:"";
+      position:absolute;inset:0;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(255,255,255,0.03) 0 1px, transparent 1px),
+        radial-gradient(circle at 70% 80%, rgba(255,255,255,0.02) 0 1px, transparent 1px),
+        radial-gradient(circle at 50% 40%, rgba(255,255,255,0.01) 0 1px, transparent 1px);
+      background-size: 80px 80px, 120px 120px, 200px 200px;
+      opacity:0.6;
+      pointer-events:none;
+      z-index:2;
+      mix-blend-mode:overlay;
+      transform:translateZ(0);
+    }
+
+    /* Hero content card (glass) */
+    .hero-inner{
+      max-width:var(--container-width);
+      width:100%;
+      z-index:10;
+      display:flex;
+      align-items:center;
+      gap:40px;
+      padding:40px;
+      margin:0 auto;
+      position:relative;
+    }
+
+    .hero-card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      backdrop-filter: blur(8px) saturate(120%);
+      -webkit-backdrop-filter: blur(8px) saturate(120%);
+      border-radius:16px;
+      padding:36px;
+      box-shadow: 0 10px 40px rgba(2,6,23,0.6);
+      display:flex;
+      gap:28px;
+      align-items:center;
+      width:100%;
+    }
+
+    .hero-text{
+      flex:1;
+      min-width:0;
+    }
+    h1{
+      margin:0 0 10px 0;
+      font-size:clamp(1.7rem, 4vw, 2.6rem);
+      line-height:1.05;
+      letter-spacing:-0.02em;
+      color:var(--text);
+    }
+    p.lead{
+      margin:0 0 20px 0;
+      color:var(--muted);
+      font-size:1.02rem;
+    }
+
+    .cta{
+      display:inline-flex;
+      align-items:center;
+      gap:12px;
+      background:linear-gradient(90deg,var(--accent),var(--accent-2));
+      color:#042233;
+      font-weight:700;
+      padding:12px 18px;
+      border-radius:12px;
+      text-decoration:none;
+      box-shadow:0 8px 26px rgba(123,192,255,0.14);
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    .cta:active{transform:translateY(1px)}
+    .cta:hover{transform:translateY(-4px); box-shadow:0 16px 36px rgba(123,192,255,0.18)}
+
+    /* small info column / stats */
+    .hero-side{
+      width:280px;
+      min-width:220px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      color:var(--muted);
+    }
+    .stat{
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:10px;
+      padding:12px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-weight:700;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+    }
+    .stat small{font-weight:600;color:var(--muted);font-size:0.85rem}
+    .stat strong{font-size:1.05rem;color:var(--text)}
+
+    /* responsive */
+    @media (max-width:980px){
+      .hero-card{flex-direction:column;align-items:flex-start}
+      .hero-side{width:100%}
+      nav{padding:0 16px}
+    }
+    @media (max-width:640px){
+      nav{margin-top:12px}
+      .brand .name{display:none}
+      .hero{padding:4rem 16px 6rem}
+      .hero-card{padding:22px}
+      .hero-side{display:none}
+    }
+
+    /* reduce motion preference */
+    @media (prefers-reduced-motion: reduce){
+      .bg-gradient::after, .blob, .hero::before { animation: none !important; transition: none !important; transform:none !important; }
+      .cta{transition:none}
+    }
+
+    /* tiny utility */
+    .muted{color:var(--muted)}
+    .center{text-align:center}
+/* -- */
+.status {
+  position: fixed;
+  top: 80px;         /* below navbar */
+  left: 20px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-family: sans-serif;
+  color: #fff;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  opacity: 0;
+  transform: translateY(-20px) scale(0.9);
+  animation: popup 0.6s forwards, hide 0.6s 3s forwards;
+  z-index: 9999;
+}
+
+/* Status colors */
+.status.in { background: #4caf50; }
+.status.out { background: #f44336; }
+
+/* Keyframes */
+@keyframes popup {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes hide {
+  to {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.9);
+  }
+}
+
+  </style>
+</head>
+<body>
+   <%- include('../partials/header') %>
+    <div class="status <%= user ? 'in' : 'out' %>">
+  <%= user ? '✔ You are Logged IN' : '❌ You are not Logged In' %>
+</div>
+  <div class="page">
+
+    <header class="hero" role="banner">
+      <!-- background layers -->
+      <div class="bg-gradient" aria-hidden="true"></div>
+      <div class="blob b1" aria-hidden="true"></div>
+      <div class="blob b2" aria-hidden="true"></div>
+      <div class="blob b3" aria-hidden="true"></div>
+
+      <div class="hero-inner" role="region" aria-labelledby="hero-heading">
+        <div class="hero-card" >
+          <div class="hero-text">
+            <h1 id="hero-heading">Build amazing pages with a dreamy animated background</h1>
+            <p class="lead">A lightweight hero template that uses only HTML & CSS — animated gradient, floating blobs, and subtle particles to make your landing feel alive.</p>
+            <div style="display:flex;gap:12px;flex-wrap:wrap">
+              <a class="cta" href="#get-started">Get started</a>
+              <a href="#learn-more" style="align-self:center;color:var(--muted);text-decoration:none;font-weight:700;padding:8px 12px;border-radius:10px;background:transparent">Learn more →</a>
+            </div>
+          </div>
+
+          <aside class="hero-side" aria-label="Quick stats">
+            <div class="stat">
+              <small>Users</small>
+              <strong>37.4k</strong>
+            </div>
+            <div class="stat">
+              <small>Deploys / day</small>
+              <strong>1.2k</strong>
+            </div>
+            <div class="stat">
+              <small>Uptime</small>
+              <strong>99.99%</strong>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </header>
+
+    <!-- Example content below hero -->
+    <main style="max-width:var(--container-width);margin:40px auto;padding:0 20px 80px">
+      <section id="features" style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+        <article style="background:var(--glass);padding:18px;border-radius:10px">
+          <h3 style="margin-top:0">Fast & Responsive</h3>
+          <p class="muted">Built with performance and accessibility in mind—pure CSS animations, hardware-accelerated transforms, and minimized repaints.</p>
+        </article>
+        <article style="background:var(--glass);padding:18px;border-radius:10px">
+          <h3 style="margin-top:0">Fully Customizable</h3>
+          <p class="muted">Change colors, blob sizes, or animation speeds — everything is in CSS variables and keyframes.</p>
+        </article>
+      </section>
+    </main>
+  </div>
+  <!-- <%- include('../partials/footer') %> -->
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortner</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+<body>
+  <%- include('partials/header') %>
+    <div class="container">
+        <h1 class="h1">URL Shortner</h1>
+        <form action="/" method="post">
+            <label for="url">Enter URL:</label>
+            <input type="url" name="url" id="url" placeholder="Enter your long URL here" required>
+            <label for="shortcode">Enter ShortCode:</label>
+            <input type="text" name="shortcode" id="shortcode" placeholder="Enter desired shortcode" required> 
+            <button class="main-btn" type="submit">Generate Short URL</button>
+        </form>
+        <h2>Shortened URLs</h2>
+<ul class="link-list">
+  <% links.forEach(({ shortcode, url, }) => { %>
+    <li class="link-card">
+      <div class="link-info">
+        <a href="/<%= shortcode %>" target="_blank" class="short-link">
+          <%= host %>/<%= shortcode %>
+        </a>
+        <p class="original-url">
+          <%= url.length > 30 ? url.slice(0, 40) + '...' : url %>
+        </p>
+      </div>
+
+      <!-- <div class="action-buttons">
+        <a href="/edit/<%= id %>" class="edit-btn">
+          <i class="fa-solid fa-pen"></i>
+        </a>
+
+        <form action="/delete/<%= id %>" method="POST" class="delete-form">
+          <button type="submit" class="delete-btn">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </form>
+      </div> -->
+    <!-- </li> -->
+  <!-- <% }); %>
+</ul>
+        
+    </div>
+</body>
+</html> --> -->

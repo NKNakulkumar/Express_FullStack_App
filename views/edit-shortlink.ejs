@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Shortner</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+    <div class="container">
+        <h1 class="h1">URL Shortner</h1>
+        <form action="/" method="post">
+            <label for="url">Enter URL:</label>
+            <input type="url" name="url" id="url" value="<%= url %>" placeholder="Enter your long URL here" >
+            <label for="shortcode">Enter ShortCode:</label>
+            <input type="text" name="shortcode" id="shortcode" value="<%= shortcode %>" placeholder="Enter desired shortcode" > 
+              <% if (errors && errors.length>0) { %>
+            <div class="errors">
+              <% errors.forEach(error => { %>
+              <li><%= error %></li>
+              <% }) %>
+            </div>
+            <% } %>
+           
+            <button type="submit" value="Update" name="shortner" id="shortner" class="main-btn">Update</button>
+        </form>
+    </div>
+</body>
+</html>

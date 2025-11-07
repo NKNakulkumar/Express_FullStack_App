@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - Join Us Today</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        overflow-x: hidden;
+        background: #0f0f23;
+      }
+
+      .container {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* Registration Section (Left Side) */
+      .register-section {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff;
+        padding: 40px;
+      }
+
+      .register-box {
+        width: 100%;
+        max-width: 480px;
+        animation: slideInLeft 1s ease-out;
+      }
+
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .register-header {
+        margin-bottom: 35px;
+      }
+
+      .register-header h2 {
+        font-size: 36px;
+        color: #1a1a2e;
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+
+      .register-header p {
+        color: #666;
+        font-size: 16px;
+      }
+
+      .input-group {
+        position: relative;
+        margin-bottom: 22px;
+      }
+
+      .input-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: 500;
+        font-size: 14px;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 15px 20px 15px 50px;
+        border: 2px solid #e8e8e8;
+        border-radius: 12px;
+        font-size: 15px;
+        transition: all 0.3s;
+        background: #f9f9f9;
+      }
+
+      .input-group input:focus {
+        outline: none;
+        border-color: #667eea;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+      }
+
+      .input-icon {
+        position: absolute;
+        left: 18px;
+        bottom: 16px;
+        font-size: 20px;
+      }
+
+      .terms {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 25px;
+      }
+
+      .terms input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        margin-top: 2px;
+        cursor: pointer;
+      }
+
+      .terms label {
+        font-size: 13px;
+        color: #666;
+        line-height: 1.5;
+      }
+
+      .terms a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .terms a:hover {
+        text-decoration: underline;
+      }
+
+      .register-btn {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 12px;
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+      }
+
+      .register-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px rgba(102, 126, 234, 0.4);
+      }
+
+      .register-btn:active {
+        transform: translateY(0);
+      }
+
+      .divider {
+        display: flex;
+        align-items: center;
+        margin: 25px 0;
+      }
+
+      .divider::before,
+      .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #e0e0e0;
+      }
+
+      .divider span {
+        padding: 0 15px;
+        color: #999;
+        font-size: 14px;
+      }
+
+      .social-signup {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 25px;
+      }
+
+      .social-btn {
+        flex: 1;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .social-btn:hover {
+        border-color: #667eea;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .login-link {
+        text-align: center;
+        color: #666;
+        font-size: 14px;
+      }
+
+      .login-link a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s;
+      }
+
+      .login-link a:hover {
+        color: #764ba2;
+      }
+
+      /* Hero Section (Right Side) */
+      .hero-section {
+        flex: 1;
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .animated-bg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
+      .floating-shape {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.15);
+        animation: float 18s infinite ease-in-out;
+      }
+
+      .shape1 {
+        width: 350px;
+        height: 350px;
+        top: -80px;
+        right: -80px;
+        animation-delay: 0s;
+      }
+
+      .shape2 {
+        width: 250px;
+        height: 250px;
+        bottom: -60px;
+        left: -60px;
+        animation-delay: 4s;
+      }
+
+      .shape3 {
+        width: 180px;
+        height: 180px;
+        top: 35%;
+        right: 25%;
+        animation-delay: 7s;
+      }
+
+      .shape4 {
+        width: 220px;
+        height: 220px;
+        bottom: 25%;
+        left: 20%;
+        animation-delay: 2s;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate(0, 0) rotate(0deg) scale(1);
+        }
+        33% {
+          transform: translate(40px, -40px) rotate(120deg) scale(1.1);
+        }
+        66% {
+          transform: translate(-30px, 40px) rotate(240deg) scale(0.9);
+        }
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        color: white;
+        padding: 40px;
+        animation: fadeInUp 1s ease-out;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .hero-icon {
+        width: 130px;
+        height: 130px;
+        background: rgba(255, 255, 255, 0.25);
+        border-radius: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 30px;
+        font-size: 65px;
+        backdrop-filter: blur(10px);
+        animation: pulse 3s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      .hero-content h1 {
+        font-size: 48px;
+        margin-bottom: 20px;
+        font-weight: 700;
+        text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .hero-content p {
+        font-size: 20px;
+        line-height: 1.6;
+        opacity: 0.95;
+        max-width: 500px;
+        margin: 0 auto 40px;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .stat-card {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        padding: 25px 15px;
+        border-radius: 15px;
+        animation: fadeIn 1s ease-out;
+        transition: transform 0.3s;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-8px);
+      }
+
+      .stat-card:nth-child(1) {
+        animation-delay: 0.2s;
+      }
+      .stat-card:nth-child(2) {
+        animation-delay: 0.4s;
+      }
+      .stat-card:nth-child(3) {
+        animation-delay: 0.6s;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .stat-card h3 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .stat-card p {
+        font-size: 14px;
+        margin: 0;
+        opacity: 0.9;
+      }
+
+      @media (max-width: 968px) {
+        .container {
+          flex-direction: column-reverse;
+        }
+
+        .hero-section {
+          min-height: 40vh;
+        }
+
+        .hero-content h1 {
+          font-size: 32px;
+        }
+
+        .stats-grid {
+          grid-template-columns: 1fr;
+          gap: 15px;
+        }
+      }
+      .errors {
+        width: 100%;
+        background: linear-gradient(135deg, #ffd93d, #f9ca24);
+        list-style: none;
+        color: #2c3e50;
+        padding: 16px 22px;
+        margin: 10px 0;
+        border-left: 5px solid #e64622;
+        border-radius: 10px;
+        font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        box-shadow: 0 6px 20px rgba(249, 202, 36, 0.35);
+        animation: slideIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .errors::before {
+        content: "⚠️";
+        font-size: 1.3rem;
+        animation: pulse 1.5s infinite;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
+
+      .errors:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(249, 202, 36, 0.45);
+        transition: all 0.3s ease;
+      }
+    </style>
+  </head>
+  <body>
+      <%- include('../partials/header') %>
+    <div class="container">
+      <div class="register-section">
+        <div class="register-box">
+          <div class="register-header">
+            <h2>Create Account</h2>
+            <p>Sign up to get started with your journey</p>
+          </div>
+
+          <form action="/register" method="POST">
+            <div class="input-group">
+              <label for="name">Full Name</label>
+              <span class="input-icon">👤</span>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Enter your full name"
+              />
+            </div>
+
+            <div class="input-group">
+              <label for="email">Email Address</label>
+              <span class="input-icon">📧</span>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+              />
+            </div>
+
+            <div class="input-group">
+              <label for="password">Password</label>
+              <span class="input-icon">🔒</span>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Create a password"
+              />
+            </div>
+
+            <div class="input-group">
+              <label for="confirm-password">Confirm Password</label>
+              <span class="input-icon">🔐</span>
+              <input
+                type="password"
+                id="confirm-password"
+                placeholder="Confirm your password"
+              />
+            </div>
+
+                           <!-- <div class="terms">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms">
+                            I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                        </label>
+                    </div>  -->
+
+                    
+              <% if (errors && errors.length > 0) { %>
+          <% errors.forEach((error) => { %>
+          <p class="errors"><%= error %></p>
+            <% }); %>
+              <% } %>
+
+            <button
+              type="submit"
+              name="signup"
+              value="Register"
+              class="register-btn"
+            >
+              Create Account
+            </button>
+          </form>
+
+          <div class="divider">
+            <span>OR</span>
+          </div>
+
+          <div class="social-signup">
+            <button class="social-btn">
+              <span style="color: #db4437; font-weight: bold">G</span>
+              Google
+            </button>
+            <button class="social-btn">
+              <span style="color: #4267b2; font-weight: bold">f</span>
+              Facebook
+            </button>
+          </div>
+
+          <div class="login-link">
+            Already have an account? <a href="login.html">Sign In</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-section">
+        <div class="animated-bg">
+          <div class="floating-shape shape1"></div>
+          <div class="floating-shape shape2"></div>
+          <div class="floating-shape shape3"></div>
+          <div class="floating-shape shape4"></div>
+        </div>
+        <div class="hero-content">
+          <div class="hero-icon">✨</div>
+          <h1>Join Our Community</h1>
+          <p>
+            Create your account and unlock access to amazing features, exclusive
+            content, and a vibrant community.
+          </p>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <h3>50K+</h3>
+              <p>Active Users</p>
+            </div>
+            <div class="stat-card">
+              <h3>4.9★</h3>
+              <p>User Rating</p>
+            </div>
+            <div class="stat-card">
+              <h3>24/7</h3>
+              <p>Support</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+     <%- include('../partials/footer') %>
+  </body>
+  
+</html>
+

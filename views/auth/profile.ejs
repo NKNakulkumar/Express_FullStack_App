@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Dashboard</title>
+<link rel="stylesheet" href="/profile.css">
+</head>
+<body>
+       <%- include('../partials/header') %>
+    <div class="floating-orbs">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+    </div>
+
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>Profile Dashboard</h1>
+            <p>Welcome back! Here's your profile overview</p>
+        </div>
+
+        <div class="profile-grid">
+            <!-- Left Column: Profile Card -->
+            <div class="profile-card">
+                <% 
+const initials = user.name.charAt(0).toUpperCase();
+%>
+                <div class="profile-photo-container">
+                    <div class="profile-photo-wrapper">
+                        <div class="photo-rings">
+                            <div class="photo-ring"></div>
+                            <div class="photo-ring"></div>
+                        </div>
+                         <img src="https://ui-avatars.com/api/?name=<%= initials %>&size=200&background=00d4ff&color=0f2027&bold=true&length=2" 
+                             alt="Profile Photo" 
+                             class="profile-photo">
+                    </div>
+                </div>
+
+                <!-- <h2 class="profile-name"><%= initials %></h2> -->
+                <p class="profile-role">Senior Full Stack Developer</p>
+
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">48</span>
+                        <span class="stat-label">Projects</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">1.2K</span>
+                        <span class="stat-label">Followers</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">352</span>
+                        <span class="stat-label">Following</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Information Card -->
+            <div class="info-card">
+                <h2>Personal Information</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+              <div class="info-label">Full Name</div>
+              <div class="info-value"><%= user.name %></div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Email Address</div>
+              <div class="info-value"><%= user.email %></div>
+            </div>
+                    <div class="info-item">
+                        <div class="info-label">Phone Number</div>
+                        <div class="info-value">+1 (555) 123-4567</div>
+                    </div>
+                    <!-- <div class="info-item">
+                        <div class="info-label">Location</div>
+                        <div class="info-value">San Francisco, CA</div>
+                    </div> -->
+                    <div class="info-item">
+                        <div class="info-label">Member Since</div>
+                        <div class="info-value">  <%= new Date(user.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Department</div>
+                        <div class="info-value">Engineering</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Status</div>
+                        <div class="info-value">Active</div>
+                    </div>
+<div class="email-verification-item">
+    <div class="info-label">Email Verification</div>
+   <div class="verification-status">
+    <% if (user.isEmailValid) { %>
+        <div class="verified-badge">
+            <svg class="check-icon" viewBox="0 0 52 52">
+                <circle class="check-circle" cx="26" cy="26" r="25" fill="none"/>
+                <path class="check-path" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+            </svg>
+            <span>Email Verified</span>
+        </div>
+    <% } else { %>
+        <div class="unverified-badge">
+            <svg class="alert-icon" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+            </svg>
+            <span>Email Not Verified</span>
+        </div>
+        <a href="/verify-email" class="verify-link">
+            <span>Verify Now</span>
+            <svg class="arrow-icon" viewBox="0 0 24 24">
+                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+            </svg>
+        </a>
+    <% } %>
+</div>
+</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Section -->
+        <div class="activity-section">
+            <h2>Recent Activity</h2>
+            <div class="activity-timeline">
+                <div class="activity-item">
+                    <div class="activity-title">Updated profile photo</div>
+                    <div class="activity-time">2 hours ago</div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-title">Completed project "E-commerce Platform"</div>
+                    <div class="activity-time">1 day ago</div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-title">Joined the Development Team</div>
+                    <div class="activity-time">3 days ago</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
