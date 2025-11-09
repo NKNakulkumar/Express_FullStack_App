@@ -8,7 +8,7 @@
   <style>
     /* ---------- Basic reset & fonts ---------- */
     :root{
-      --bg-dark: #0b1020;
+      /* --bg-dark: linear-gradient(120deg,#05223c 0%, #08263f 25%, #061025 50%, #0a2540 75%); */
       --glass: rgba(255,255,255,0.06);
       --accent: #7ee7c7;
       --accent-2: #7bc0ff;
@@ -22,14 +22,13 @@
     body{
       margin:0;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background: var(--bg-dark);
+      background: linear-gradient(120deg, #05223c 0%, #08263f 25%, #061025 50%, #0a2540 75%);
       color:var(--text);
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
       line-height:1.35;
       overflow-x:hidden;
     }
-
     /* ---------- Page layout ---------- */
     .page{
       min-height:100vh;
@@ -201,7 +200,7 @@
       nav{padding:0 16px}
     }
     @media (max-width:640px){
-      nav{margin-top:12px}
+      /* nav{margin-top:12px} */
       .brand .name{display:none}
       .hero{padding:4rem 16px 6rem}
       .hero-card{padding:22px}
