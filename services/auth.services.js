@@ -1,6 +1,8 @@
 import { and, eq, gte, lt, sql } from "drizzle-orm";
 import { db } from "../config/db.js";
 import {
+  oAuthAccountsTable,
+  passwordresetTokenTable,
   sessionsTale,
   shortLink,
   UserData,
@@ -18,7 +20,7 @@ import {
 import { sendEmail } from "../lib/send-email.js";
 import { readFile } from "fs/promises";
 import path from "path";
-import ejs from 'ejs'
+import ejs from "ejs";
 import mjml2html from "mjml";
 
 export const getuserEmailexist = async (email) => {
@@ -47,6 +49,15 @@ export const comparepassword = async (password, hashpassword) => {
     console.error("Password verification error:", error);
     return false;
   }
+};
+
+// UpdateUserPassword
+export const UpdateUserPassword = async ({ userId, newPassword }) => {
+  const newHashPassword = await hashpassword(newPassword);
+  return db
+    .update(UserData)
+    .set({ password: newHashPassword })
+    .where(eq(UserData.id, userId));
 };
 
 // export const generateToken=({id,name,email})=>{
@@ -235,14 +246,14 @@ export const createverifyEmailLink = ({ email, token }) => {
 //     );
 
 //     if(!tokendata.length){
-//       return null 
+//       return null
 //     }
 
 //     const {userId} = tokendata[0]
 
 //     const userdata = await db.select({userId:UserData.id,email:UserData.email}).from(UserData).where(eq(UserData.id,userId))
 //        if(!userdata.length){
-//       return null 
+//       return null
 //     }
 
 //     return {
@@ -253,10 +264,11 @@ export const createverifyEmailLink = ({ email, token }) => {
 //     }
 // };
 export const findVerificationEmailToken = async ({ token, email }) => {
-  console.log("Token",token)
-return  db.select({
-     userId:UserData.id,
-      email:UserData.email,
+  console.log("Token", token);
+  return db
+    .select({
+      userId: UserData.id,
+      email: UserData.email,
       token: VerifyEmailTokenTable.token,
       expiresAt: VerifyEmailTokenTable.expiresAt,
     })
@@ -264,54 +276,161 @@ return  db.select({
     .where(
       and(
         eq(VerifyEmailTokenTable.token, token),
-        eq(UserData.email,email),
-        gte(VerifyEmailTokenTable.expiresAt, sql`CURRENT_TIMESTAMP`),
+        eq(UserData.email, email),
+        gte(VerifyEmailTokenTable.expiresAt, sql`CURRENT_TIMESTAMP`)
       )
-    ).innerJoin(UserData,eq(VerifyEmailTokenTable.userId,UserData.id))
-
-}
-
+    )
+    .innerJoin(UserData, eq(VerifyEmailTokenTable.userId, UserData.id));
+};
 
 // VerifyuserEmailandUpdate
 
-export const VerifyuserEmailandUpdate=async(email)=>{
-
-return db.update(UserData).set({isEmailValid:true}).where(eq(UserData.email,email))
-}
+export const VerifyuserEmailandUpdate = async (email) => {
+  return db
+    .update(UserData)
+    .set({ isEmailValid: true })
+    .where(eq(UserData.email, email));
+};
 
 // clearVerifyEmailToken
 
-export const clearVerifyEmailToken=async({email})=>{
+export const clearVerifyEmailToken = async ({ email }) => {
+  const [user] = await db
+    .select()
+    .from(UserData)
+    .where(eq(UserData.email, email));
+  return await db
+    .delete(VerifyEmailTokenTable)
+    .where(eq(VerifyEmailTokenTable.userId, user.id));
+};
 
-const [user] = await db.select().from(UserData).where(eq(UserData.email,email))
-return await db.delete(VerifyEmailTokenTable).where(eq(VerifyEmailTokenTable.userId,user.id))
+export const sendNewVerifyEmailLink = async ({ userId, email }) => {
+  const randomToken = generateRandomToken();
+
+  await insertVerifyEmailToken({ userId, token: randomToken });
+
+  const verifyEmalLink = createverifyEmailLink({
+    email,
+    token: randomToken,
+  });
+
+  //1 to get the file data -
+  const mjmldata = await readFile(
+    path.join(import.meta.dirname, "..", "emails", "verify-email.mjml"),
+    "utf-8"
+  );
+  // 2 to replace the placeholders with the actual values .
+  const fieldTemplete = ejs.render(mjmldata, {
+    code: randomToken,
+    link: verifyEmalLink,
+  });
+
+  // 3 to convert mjml to html .
+  const htmlOutput = mjml2html(fieldTemplete).html;
+
+  sendEmail({
+    to: email,
+    subject: "Verify your email",
+    html: htmlOutput,
+  }).catch("Error", console.error);
+};
+
+// UpdateUserByName
+export const UpdateUserByName = async ({ userId, name }) => {
+  return await db
+    .update(UserData)
+    .set({ name: name })
+    .where(eq(UserData.id, userId));
+};
+
+// finduserbyEmail
+export const finduserbyEmail = async (email) => {
+  const [user] = await db
+    .select()
+    .from(UserData)
+    .where(eq(UserData.email, email));
+  return user;
+};
+
+export const CreateResetPasswordLink = async ({ userId }) => {
+  const randomToken = crypto.randomBytes(32).toString("hex");
+  const tokenHash = crypto
+    .createHash("sha256")
+    .update(randomToken)
+    .digest("hex");
+
+  await db
+    .delete(passwordresetTokenTable)
+    .where(eq(passwordresetTokenTable.userId, userId));
+  await db.insert(passwordresetTokenTable).values({ userId, tokenHash });
+  return `${process.env.FRONTENED_URL}/reset-password/${randomToken}`;
+};
+// 1 Random token generate
+//2 convert int hash token
+// 3 clear the previous token
+// 4 now wened to inser usedId , hastoken
+// 5 return the link
+
+export const getResetPasswordToken = async (token) => {
+  const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
+  const [data] = await db
+    .select()
+    .from(passwordresetTokenTable)
+    .where(
+      and(
+        eq(passwordresetTokenTable.tokenHash, tokenHash),
+        gte(passwordresetTokenTable.expiresAt, sql`CURRENT_TIMESTAMP`)
+      )
+    );
+ return data ?? null; // return first row or null
+};
+
+// ClearResetPasswordToken
+
+export const ClearResetPasswordToken = async (userId) => {
+  return await db
+    .delete(passwordresetTokenTable)
+    .where(eq(passwordresetTokenTable.userId, userId));
+};
+
+// getUserWithOauthId
+export const getUserWithOauthId =async({email,provider})=>{
+
+  const [user] = await db.select({id:UserData.id,name:UserData.id,email:UserData.email,isEmailValid:UserData.isEmailValid,providerAccountId:oAuthAccountsTable.providerAccountId}).from(UserData).where(eq(UserData.email,email)).leftJoin(oAuthAccountsTable,and(eq(oAuthAccountsTable.provider,provider),eq(oAuthAccountsTable.userId,UserData.id)))
+return user;
+
 }
 
+export const linkUserWithOauth =async({userId,provider,providerAccountId})=>{
+await db.insert(oAuthAccountsTable).values({
+  userId,
+  provider,
+  providerAccountId
+})
 
-export const sendNewVerifyEmailLink= async({userId,email})=>{
+}
 
-  const randomToken = generateRandomToken()
+export const CreateUserWithAuth=async({name,email,provider,providerAccountId})=>{
 
-  await insertVerifyEmailToken({userId,token:randomToken})
+  const user = await db.transaction(async(trx)=>{
+    const [user] = await trx.insert(UserData).values({name,email,isEmailValid:true}).$returningId();
 
-  const verifyEmalLink  = createverifyEmailLink({
-    email,
-    token:randomToken, 
+    await trx.insert(oAuthAccountsTable).values({
+      provider,
+      providerAccountId,
+      userId:user.id
+    })
 
+    return{
+      id:user.id,
+      name,
+      email,
+      isEmailValid:true,
+       provider,
+      providerAccountId,
+ 
+    }
 
   })
-
-  //1 to get the file data -  
-const mjmldata = await readFile(path.join(import.meta.dirname,"..","emails","verify-email.mjml"),"utf-8")
-// 2 to replace the placeholders with the actual values .
-const fieldTemplete = ejs.render(mjmldata,{code:randomToken,link:verifyEmalLink})
-
-// 3 to convert mjml to html .
-const htmlOutput  = mjml2html(fieldTemplete).html;
-
-sendEmail({
-to:email,
-subject:"Verify your email",
-html:htmlOutput
-}).catch("Error",console.error)
+      return user ;
 }

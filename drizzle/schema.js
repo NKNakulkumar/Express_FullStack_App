@@ -1,5 +1,5 @@
 import { relations, sql } from 'drizzle-orm';
-import { boolean, int, mysqlTable, text, timestamp, varchar } from 'drizzle-orm/mysql-core';
+import { boolean, int, mysqlEnum, mysqlTable, text, timestamp, varchar } from 'drizzle-orm/mysql-core';
 
 
 export const shortLink = mysqlTable('short_link', {
@@ -36,11 +36,21 @@ export const UserData = mysqlTable("users", {
   id: int().autoincrement().primaryKey(),
   name: varchar({ length: 255 }).notNull(),
   email: varchar({ length: 255 }).notNull().unique(),
-  password: varchar({ length: 255 }).notNull(),
+  password: varchar({ length: 255 }),
   isEmailValid:boolean("is_email_valid").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
 });
+
+export const oAuthAccountsTable = mysqlTable("oauth_accounts",{
+  id: int("id").autoincrement().primaryKey(),
+  userId:int("user_id").notNull().references(()=>UserData.id,{onDelete:"cascade"}),
+  provider:mysqlEnum("provider",["google","github"]).notNull(),
+  providerAccountId:varchar("provider_account_id",{length:255}).notNull().unique(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  
+
+})
 
 export const usersRelation = relations(UserData, ({ many }) => ({
   shortLinks: many(shortLink),
@@ -62,3 +72,13 @@ user:one(UserData,{
 })
 
 }))
+
+export const passwordresetTokenTable = mysqlTable("password_reset_token",{
+id:int("id").autoincrement().primaryKey(),
+  userId:int("user_id").notNull().references(()=>UserData.id,{onDelete:"cascade"}).unique(),
+  tokenHash:text("token_hash").notNull(),
+   expiresAt: timestamp("expires_at").default(sql`(CURRENT_TIMESTAMP + INTERVAL 1 HOUR)`).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+
+
+})

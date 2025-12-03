@@ -55,42 +55,107 @@ const initials = user.name.charAt(0).toUpperCase();
                         <span class="stat-label">Following</span>
                     </div>
                 </div>
-            </div>
+            </div>  
 
             <!-- Right Column: Information Card -->
-            <div class="info-card">
-                <h2>Personal Information</h2>
-                <div class="info-grid">
-                    <div class="info-item">
-              <div class="info-label">Full Name</div>
-              <div class="info-value"><%= user.name %></div>
+<div class="info-card">
+ <div style=" justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+  <%if(user.hashPassword){%>
+    <a href="/change-password" class="edit-btn">
+      <svg viewBox="0 0 24 24" width="18" height="18">
+        <path fill="currentColor"
+          d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+      </svg>
+      Change Password
+    </a> 
+    <%} else{%>
+        <a href="/set-password" class="edit-btn">
+      <svg viewBox="0 0 24 24" width="18" height="18">
+        <path fill="currentColor"
+          d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+      </svg>
+      Set Password
+    </a> 
+      <% } %>
+  </div>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h2 style="margin-bottom: 0;">Personal Information</h2>
+    <button id="editBtn" class="edit-btn">
+      <svg viewBox="0 0 24 24" width="18" height="18">
+        <path fill="currentColor"
+          d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+      </svg>
+      Edit Profile
+    </button> 
+  </div>
+  
+
+  <!-- Form for edit/update -->
+  <form id="profileForm" method="POST" action="/profile">
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="info-label">Full Name</div>
+        <div class="info-value view-mode"><%= user.name %></div>
+        <input type="text" name="name" value="<%= user.name %>" class="info-input edit-mode" style="display: none;">
+      </div>
+
+      <div class="info-item">
+        <div class="info-label">Email Address</div>
+        <div class="info-value view-mode"><%= user.email %></div>
+        <input type="email" name="email" value="<%= user.email %>" class="info-input edit-mode" style="display: none;" readonly>
+      </div>
+
+      <div class="info-item">
+        <div class="info-label">Phone Number</div>
+        <div class="info-value view-mode">+1 (555) 123-4567</div>
+        <input type="tel" name="phone" value="+1 (555) 123-4567" class="info-input edit-mode" style="display: none;">
+      </div>
+
+      <div class="info-item">
+        <div class="info-label">Member Since</div>
+        <div class="info-value">
+          <%= new Date(user.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <div class="info-label">Department</div>
+        <div class="info-value view-mode">Engineering</div>
+        <input type="text" name="department" value="Engineering" class="info-input edit-mode" style="display: none;">
+      </div>
+
+      <div class="info-item">
+        <div class="info-label">Status</div>
+      <div class=" status-active">
+        <div class="tick-circle">
+            <div class="blink-dot-container">
+                <div class="blink-dot"></div>
             </div>
-            <div class="info-item">
-              <div class="info-label">Email Address</div>
-              <div class="info-value"><%= user.email %></div>
-            </div>
-                    <div class="info-item">
-                        <div class="info-label">Phone Number</div>
-                        <div class="info-value">+1 (555) 123-4567</div>
-                    </div>
-                    <!-- <div class="info-item">
-                        <div class="info-label">Location</div>
-                        <div class="info-value">San Francisco, CA</div>
-                    </div> -->
-                    <div class="info-item">
-                        <div class="info-label">Member Since</div>
-                        <div class="info-value">  <%= new Date(user.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Department</div>
-                        <div class="info-value">Engineering</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Status</div>
-                        <div class="info-value">Active</div>
-                    </div>
+            <span>Active</span>
+        </div>
+    </div>
+
+      </div>
+
+      <!-- Email verification section stays the same -->
+    <!-- </div> -->
+
+    <div class="edit-actions" style="display: none; margin-top: 2rem; gap: 1rem;">
+        
+      <button type="submit" class="save-btn">
+        <svg viewBox="0 0 24 24" width="18" height="18">
+          <path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+        </svg>
+        Save Changes
+      </button>
+      <button type="button" id="cancelBtn" class="cancel-btn">Cancel</button>
+    </div>
+    </div>
+  </form>
+<!-- </div> -->
+                    
 <div class="email-verification-item">
-    <div class="info-label">Email Verification</div>
+    <p class="info-label">Email Verification</p>
    <div class="verification-status">
     <% if (user.isEmailValid) { %>
         <div class="verified-badge">
@@ -108,7 +173,7 @@ const initials = user.name.charAt(0).toUpperCase();
             <span>Email Not Verified</span>
         </div>
         <a href="/verify-email" class="verify-link">
-            <span>Verify Now</span>
+            <span style="color: white;">Verify Now</span>
             <svg class="arrow-icon" viewBox="0 0 24 24">
                 <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
             </svg>
@@ -116,7 +181,7 @@ const initials = user.name.charAt(0).toUpperCase();
     <% } %>
 </div>
 </div>
-                </div>
+                <!-- </div> -->
             </div>
         </div>
 
@@ -139,5 +204,26 @@ const initials = user.name.charAt(0).toUpperCase();
             </div>
         </div>
     </div>
+    <script>
+  const editBtn = document.getElementById("editBtn");
+  const cancelBtn = document.getElementById("cancelBtn");
+  const viewModeElements = document.querySelectorAll(".view-mode");
+  const editModeElements = document.querySelectorAll(".edit-mode");
+  const editActions = document.querySelector(".edit-actions");
+
+  editBtn.addEventListener("click", () => {
+    viewModeElements.forEach(el => el.style.display = "none");
+    editModeElements.forEach(el => el.style.display = "block");
+    editActions.style.display = "flex";
+    editBtn.style.display = "none";
+  });
+
+  cancelBtn.addEventListener("click", () => {
+    viewModeElements.forEach(el => el.style.display = "block");
+    editModeElements.forEach(el => el.style.display = "none");
+    editActions.style.display = "none";
+    editBtn.style.display = "inline-flex";
+  });
+</script>
 </body>
 </html>

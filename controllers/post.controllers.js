@@ -1,8 +1,7 @@
 
 import crypto from 'crypto'
-// import { loadLinks,saveLinks } from '../models/shortner.model.js';
 import { deleteshotcodebyId, findshortlinkbyId, getallShortlinks, getshortlinkbyshortcode, insertShortLink } from '../services/shortner.services.js';
-import { shortnerschema } from '../validators/shortner-validator.js';
+import { shortnerschema, shortnerSearchParamsSchema } from '../validators/shortner-validator.js';
 import z from 'zod';
 
 export const getshortnerPage =async (req, res) => {
@@ -10,10 +9,19 @@ export const getshortnerPage =async (req, res) => {
      if (!req.user) return res.redirect("/login");
     // const file = await readFile(path.join("views", "index.html"));
     // const links = await loadLinks();
-    const links = await getallShortlinks(req.user.id)
+    // const links = await getallShortlinks(req.user.id)
 
+const searchParams = shortnerSearchParamsSchema.safeParse(req.query)
 
-    return res.render("index",{links,host:req.host,errors: req.flash("errors")} )
+    const {shortLinks,totalcount} = await getallShortlinks({
+      userId:req.user.id,
+      offset: (searchParams.page-1)*10,
+      limit: 10,
+    })
+
+    const totalPages = Math.ceil(totalcount/10)
+
+    return res.render("index",{links:shortLinks,host:req.host,currentpage:searchParams.page,totalPages,errors: req.flash("errors")} )
     
   } catch (error) {
     console.error(error);

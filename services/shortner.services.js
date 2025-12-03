@@ -1,11 +1,15 @@
 
-import { eq } from 'drizzle-orm'
+import { count, desc, eq } from 'drizzle-orm'
 import {db }from '../config/db.js'
 import {shortLink} from '../drizzle/schema.js'
 
 
-export const getallShortlinks=async(userId)=>{  // old 
-  return  await db.select().from(shortLink).where(eq(shortLink.userId,userId))
+export const getallShortlinks=async({userId,limit=10,offset=0})=>{  // old 
+ const condition = eq(shortLink.userId,userId);
+
+  const shortLinks =   await db.select().from(shortLink).where(condition).orderBy(desc(shortLink.createdAt)).limit(limit).offset(offset);
+  const [{totalcount}] = await db.select({totalcount:count()}).from(shortLink).where(condition)
+  return {shortLinks,totalcount}
 
 }
 

@@ -14,3 +14,7 @@ shortcode:z
     .max(50, { message: "Shortcode cannot be longer than 50 characters" }),
 
 });
+
+export const shortnerSearchParamsSchema = z.object({
+  page:z.coerce.number().int().positive().min(1).optional().default(1).catch(1),
+})
