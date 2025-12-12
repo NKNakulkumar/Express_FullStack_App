@@ -65,8 +65,77 @@
           </div>
         </li>
         <% }); %>
+      
       </ul>
+      
     </div>
+    <% if (totalPages > 1) { %>
+      <div class="pagination">
+        <% if (currentpage > 1) { %>
+          <a href="?page=<%= currentpage - 1 %>" class="pagination-btn prev ">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
+            Previous
+          </a>
+        <% } %>
+
+      
+
+        
+<%
+    let startingpage = Math.max(1, currentpage - 2);
+    let endingpage = Math.min(totalPages, currentpage + 2);
+
+    while(endingpage-startingpage<4 && startingpage >1){
+      startingpage--;
+    }
+    while(endingpage-startingpage<4 && endingpage<totalPages ){
+    endingpage++;
+    }
+
+
+
+%>
+
+<% if (startingpage > 1) { %>
+  <a href="?page=1" class="links">1</a>
+
+  <% if (startingpage > 2) { %>
+      <span class="ellipse">...</span>
+  <% } %>
+  <% } %>
+
+  <% for (let i = startingpage; i <= endingpage; i++) { %>
+    <% if (i === currentpage) { %>
+        <span class="pagination-current"><%= i %></span>
+    <% } else { %>
+        <a href="?page=<%= i %>" class="links"><%= i %></a>
+    <% } %>
+<% } %>
+        
+
+  <% if (endingpage < totalPages) { %>
+
+    <% if (endingpage < totalPages - 1) { %>
+        <span class="ellipse">...</span>
+    <% } %>
+
+    <a href="?page=<%= totalPages %>" class="links"><%= totalPages %></a>
+
+<% } %>
+
+        <% if (currentpage < totalPages) { %>
+          <a href="?page=<%= currentpage + 1 %>" class="pagination-btn next ">
+            Next
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 18l6-6-6-6"/>
+            </svg>
+          </a>
+        <% } %>
+      </div>
+    <% } %>
+    
     <!-- <%- include('partials/footer') %> -->
   </body>
 </html>

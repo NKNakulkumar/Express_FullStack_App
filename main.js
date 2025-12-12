@@ -12,8 +12,9 @@ const app = express();
 
 const PORT = process.env.PORT||3004
 app.use(cookieParser())
-
+// app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('public'));
+
 // Add middleware to parse form data
 app.use(express.urlencoded({extended:true}))
 //template engine
@@ -30,6 +31,8 @@ res.locals.user = req.user;
  console.log(`${req.method} ${req.path}`); 
 return next();
 })
+
+app.use("/uploads", express.static("public"));
 
 
 app.use(authroute)

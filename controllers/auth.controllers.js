@@ -214,20 +214,20 @@ return res.redirect("/profile")
 // await UpdateUserByName({userId:req.user.id,name:data.name})
 // return res.redirect("/profile")
 // }
+
+
 export const profileHandler = async (req, res) => {
   if (!req.user) return res.redirect("/login");
 
   try {
-    // Fetch logged-in user
+    // Always fetch the latest user data from DB
     const user = await finduserbyId(req.user.id);
     if (!user) return res.status(404).send("User not found");
 
-    // Decide which view to render based on query param ?mode=edit
     const mode = req.query.mode === "edit" ? "edit" : "view";
 
-    // View profile logic (same as getProfilePage)
+    // Profile VIEW Mode
     if (mode === "view") {
-      console.log("User data:", user);
       const userShortLinks = await getAllShortLinks(user.id);
 
       return res.render("auth/profile", {
@@ -236,22 +236,29 @@ export const profileHandler = async (req, res) => {
           name: user.name,
           email: user.email,
           isEmailValid: user.isEmailValid,
-          hashPassword:Boolean(user.password),
+          hashPassword: Boolean(user.password),
           createdAt: user.createdAt,
           links: userShortLinks,
+
+          // IMPORTANT: send the latest avatar
+          avatarUrl: user.avatarUrl ? `/uploads/${user.avatarUrl}` : "/default.png",
         },
       });
     }
 
-    // Edit profile logic (same as geteditProfilePage)
+    // Profile EDIT Mode
     if (mode === "edit") {
       return res.render("auth/profile", {
         editMode: true,
-        name: user.name,
         user,
+        name: user.name,
+
+        // IMPORTANT: send the latest avatar here also
+        avatarUrl: user.avatarUrl ? `/uploads/${user.avatarUrl}` : "/default.png",
         errors: req.flash("errors"),
       });
     }
+
   } catch (error) {
     console.error("Profile handler error:", error);
     return res.status(500).send("Internal Server Error");
@@ -261,7 +268,7 @@ export const profileHandler = async (req, res) => {
 export const postProfileUpdate = async (req, res) => {
   if (!req.user) return res.redirect("/home");
   
-
+console.log("REQ FILE:", req.file);
   const { data, error } = VerifUsereditSchema.safeParse(req.body);
 
   if (error) {
@@ -270,9 +277,14 @@ export const postProfileUpdate = async (req, res) => {
     return res.redirect("/profile?mode=edit"); // stay on same page
   }
 
-  await UpdateUserByName({ userId: req.user.id, name: data.name });
+
+  const fileURL = req.file ?`uploads/avatar/${req.file.filename}`:undefined;
+    console.log("SAVED FILE URL:", fileURL);
+ const updated = await UpdateUserByName({ userId: req.user.id, name: data.name, avatarUrl:fileURL });
+ console.log("DB UPDATE RESULT:", updated);
   return res.redirect("/profile"); // reload updated profile
 };
+
 
 // getchangepassword
 export const getchangepassword=async(req,res)=>{

@@ -11,17 +11,17 @@ export const getshortnerPage =async (req, res) => {
     // const links = await loadLinks();
     // const links = await getallShortlinks(req.user.id)
 
-const searchParams = shortnerSearchParamsSchema.safeParse(req.query)
+const searchParams = shortnerSearchParamsSchema.parse(req.query)
 
     const {shortLinks,totalcount} = await getallShortlinks({
       userId:req.user.id,
       offset: (searchParams.page-1)*10,
       limit: 10,
     })
-
+// console.log(searchParams.page)
     const totalPages = Math.ceil(totalcount/10)
 
-    return res.render("index",{links:shortLinks,host:req.host,currentpage:searchParams.page,totalPages,errors: req.flash("errors")} )
+    return res.render("index",{links:shortLinks,host:req.host,currentpage:searchParams.page,totalPages:totalPages,errors: req.flash("errors")} )
     
   } catch (error) {
     console.error(error);

@@ -336,10 +336,10 @@ export const sendNewVerifyEmailLink = async ({ userId, email }) => {
 };
 
 // UpdateUserByName
-export const UpdateUserByName = async ({ userId, name }) => {
+export const UpdateUserByName = async ({ userId, name,avatarUrl }) => {
   return await db
     .update(UserData)
-    .set({ name: name })
+    .set({ name: name ,avatarUrl:avatarUrl })
     .where(eq(UserData.id, userId));
 };
 
