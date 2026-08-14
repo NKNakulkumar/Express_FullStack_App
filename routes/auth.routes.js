@@ -10,6 +10,7 @@ router.get('/', authControllers.gethomePage)
 router.route("/logout").get(authControllers.logoutUser)
 router.route("/login").get(authControllers.getLoginPage).post(authControllers.postlogin)
 router.route("/register").get(authControllers.getRegisterPage).post(authControllers.postRegister)
+router.route("/health").get(authControllers.gethealthRoute)
 // router.route("/profile").get(authControllers.getProfilePage) -profileHandler
 // router.route("/edit-profile").get(authControllers.geteditProfilePage).post(authControllers.posteditProfilrPage)
 const avatarStorage = multer.diskStorage({

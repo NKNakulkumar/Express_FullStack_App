@@ -657,3 +657,14 @@ await UpdateUserPassword({userId:req.user.id,newPassword})
     return res.redirect("/profile");
 
 }
+
+
+export const gethealthRoute=(req,res)=>{
+  res.status(200).json({
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+  });
+  console.log("Request happen")
+
+}
