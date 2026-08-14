@@ -15,18 +15,20 @@
     <div class="container">
       <h1 class="h1">URL Shortner</h1>
       <form action="/shortcode" method="post">
-        <label for="url">Enter URL:</label>
+        <label for="url">Enter URL :</label>
         <input
           type="url"
           name="url"
           id="url"
+          class="input-holder"
           placeholder="Enter your long URL here"
         />
-        <label for="shortcode">Enter ShortCode:</label>
+        <label for="shortcode">Enter ShortCode :</label>
         <input
           type="text"
           name="shortcode"
           id="shortcode"
+          class="input-holder"
           placeholder="Enter desired shortcode"
         />
 
@@ -61,14 +63,16 @@
               <button type="submit" class="delete-btn">
                 <i class="fa-solid fa-trash"></i>
               </button>
+              
             </form>
+            
           </div>
         </li>
         <% }); %>
       
       </ul>
       
-    </div>
+  
     <% if (totalPages > 1) { %>
       <div class="pagination">
         <% if (currentpage > 1) { %>
@@ -133,9 +137,11 @@
             </svg>
           </a>
         <% } %>
+       
       </div>
     <% } %>
-    
-
+   
+  </div>
+  <%- include('../views/partials/footer') %>
   </body>
 </html>
